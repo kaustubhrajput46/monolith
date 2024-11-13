@@ -1,6 +1,8 @@
 package com.Elevcraft.esp.monolith.userManagement.controller;
 
 import com.Elevcraft.esp.monolith.userManagement.entity.User;
+import com.Elevcraft.esp.monolith.userManagement.service.CreateUserRequest;
+import com.Elevcraft.esp.monolith.userManagement.service.UpdateUserRequest;
 import com.Elevcraft.esp.monolith.userManagement.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,16 +29,21 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
+        User user = userServiceImpl.getUserById(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @PostMapping("/")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        //TODO: Use UserData dto instead of User entity.
-        User createdUser = this.userServiceImpl.createUser(user);
+    public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
+        User createdUser = this.userServiceImpl.createUser(createUserRequest);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody User user) {
-        User updatedUser = userServiceImpl.updateUser(id, user);
+    public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody UpdateUserRequest updateUserRequest) {
+        User updatedUser = userServiceImpl.updateUser(id, updateUserRequest);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
